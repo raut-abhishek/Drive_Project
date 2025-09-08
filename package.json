@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "ejs": "^3.1.10",
+    "express-validator": "^7.2.1",
     "exprexx": "^1.0.0"
   }
 }
