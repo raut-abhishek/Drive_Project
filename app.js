@@ -1,4 +1,5 @@
 const express = require('express');
+const PORT = process.env.PORT || 3000;
 const userRouter = require('./routes/user.routes')
 const dotenv = require('dotenv');
 dotenv.config();
@@ -19,6 +20,6 @@ app.use('/', indexRouter);
 app.use('/user', userRouter);
 
 
-app.listen(3000, ()=>{
-    console.log('Server is running on port 3000');
+app.listen(PORT, ()=>{
+    console.log(`Server is running on port ${PORT}`);
 })
