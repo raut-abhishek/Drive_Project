@@ -1,29 +1,26 @@
 const jwt = require('jsonwebtoken');
 
+function auth(req, res, next) {
+    const token = req.cookies.token; // get JWT from cookie
 
-function auth(req, res, next){
-    const token = req.cookies.token;
-
-    if(!token){
-        return res.status(401).json({
-            message: 'unauthorised'
-        })
+    if (!token) {
+        // User is not logged in → redirect to login page
+        return res.redirect('/user/login');
     }
 
-    try{
-
+    try {
+        // Verify token
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
+        // Attach user info to request
         req.user = decoded;
-        return next();
 
-    } catch(err){
-
-        return res.status(401).json({
-            message: 'Unauthorised'
-        })
+        // Continue to next middleware/route
+        next();
+    } catch (err) {
+        // Invalid or expired token → redirect to login
+        return res.redirect('/user/login');
     }
 }
-
 
 module.exports = auth;
