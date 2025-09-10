@@ -34,7 +34,7 @@ router.post('/upload', authMiddleware, upload.single('file'), async (req, res) =
         user: req.user.userID                
       });
 
-      res.json(newFile);
+      res.redirect('/home');
     } catch (err) {
       res.status(400).json({ error: err.message });
     }
