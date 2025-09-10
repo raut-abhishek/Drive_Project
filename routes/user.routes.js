@@ -32,60 +32,53 @@ router.post('/register',
             username,
             password: hashPassword
         })
-        res.json(newUser);
+        res.redirect('/user/login');
 })
 
 
 // login section
-router.get('/login', (req, res)=>{
-    res.render('login');
-})
+router.get('/login', (req, res) => {
+    res.render('login'); // show login form
+});
+
 router.post('/login',
-    body('username').trim().isLength({min:3}),
-    body('password').trim().isLength({min:5}),
-    async (req, res)=>{
+    body('username').trim().isLength({ min: 3 }),
+    body('password').trim().isLength({ min: 5 }),
+    async (req, res) => {
 
         const errors = validationResult(req);
 
-        if(!errors.isEmpty()){
-            return res.status(400).json({
-                error: errors.array(),
-                message: Data
-            })
+        if (!errors.isEmpty()) {
+            return res.status(400).render('login', { errors: errors.array(), error: null });
         }
 
-        const {username, password} = req.body;
+        const { username, password } = req.body;
 
-        const user = await userModel.findOne({
-            username : username
-        })
-        if(!user){
-            return res.status(400).json({
-                message: 'username or password is incorrect'
-            })
+        const user = await userModel.findOne({ username });
+        if (!user) {
+            return res.status(400).render('login', { errors: null, error: 'Username or password is incorrect' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if(!isMatch){
-            return res.status(400).json({
-                message: 'username or password is incorrect'
-            })
+        if (!isMatch) {
+            return res.status(400).render('login', { errors: null, error: 'Username or password is incorrect' });
         }
 
-
         // Token creation
-        const token = jwt.sign({
-            userID: user._id,
-            emil : user.email,
-            username : user.username
-        },
-            process.env.JWT_SECRET 
-        )
+        const token = jwt.sign(
+            {
+                userID: user._id,
+                email: user.email, 
+                username: user.username
+            },
+            process.env.JWT_SECRET
+        );
 
-        res.cookie('token', token)
-        res.send('Logged in')
- 
+        
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
+        res.redirect('/home'); //redirects after successful login
     }
- )
+);
+
 
 module.exports = router;
