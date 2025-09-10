@@ -7,6 +7,11 @@ const upload = require('../config/multer.config');
 const fileModel = require('../models/files.models');
 
 
+router.get('/', (req, res) => {
+    res.redirect('/home');
+});
+
+
 router.get('/home', authMiddleware, async (req, res)=>{
 
     const userFiles = await fileModel.find({
