@@ -1,34 +1,74 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Drive</title>
+    <title>Drive | Login</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
   </head>
-  <body
-    class="bg-gray-100 dark:bg-gray-800 h-screen w-screen flex items-center justify-center"
-  
-  >
-    <form
-    action="/user/login"
-    method = "post"
-    class="w-96"
-    >
+  <body class="bg-black min-h-screen flex flex-col items-center text-gray-800 dark:text-white">
 
-            <div>
-                <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                <input type="text" id="first_name" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="John" name="username" required />
-            </div>
-            <div class="mb-6">
-                <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                <input type="password" id="password" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" name="password" required />
-            </div>
-            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Log In</button>
-    </form>
+    <!-- Big app name at top -->
+    <div class="mt-10 text-center">
+      <h1 class="text-5xl md:text-6xl font-extrabold text-white mb-2">Welcome Back to Drive</h1>
+      <p class="text-lg text-gray-300">Log in to access your files securely</p>
+    </div>
 
+    <!-- Login Card -->
+    <div class="bg-white dark:bg-gray-900 shadow-2xl rounded-xl p-8 w-full max-w-md mt-10">
+      <h2 class="text-3xl font-bold mb-6 text-gray-800 dark:text-white text-center">Log In</h2>
 
+      <% if (error) { %>
+        <p class="text-red-500 text-sm mb-4 text-center"><%= error %></p>
+      <% } %>
+      <% if (errors) { %>
+        <ul class="text-red-500 text-sm mb-4">
+          <% errors.forEach(err => { %>
+            <li><%= err.msg %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+
+      <form action="/user/login" method="post" class="space-y-4">
+        <div>
+          <label for="username" class="block mb-2 font-medium text-gray-800 dark:text-white">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+            required
+            class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          />
+        </div>
+
+        <div>
+          <label for="password" class="block mb-2 font-medium text-gray-800 dark:text-white">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="••••••••"
+            required
+            class="w-full p-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200"
+        >
+          Log In
+        </button>
+      </form>
+
+      <p class="text-sm text-gray-700 dark:text-gray-300 mt-4 text-center">
+        Don't have an account? 
+        <a href="/user/register" class="text-blue-500 hover:underline">Sign Up</a>
+      </p>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.js"></script>
   </body>
