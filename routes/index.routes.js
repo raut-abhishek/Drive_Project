@@ -20,7 +20,8 @@ router.get('/home', authMiddleware, async (req, res)=>{
     // console.log(userFiles)
 
     res.render('home', {
-        files: userFiles
+        files: userFiles,
+        user: req.user 
     });
 })
 
