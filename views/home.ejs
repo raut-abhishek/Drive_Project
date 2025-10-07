@@ -7,6 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   <link href="https://cdn.jsdelivr.net/npm/flowbite@3.1.2/dist/flowbite.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="shortcut icon" href="../cloud_logo.ico" type="image/x-icon">
 </head>
 <body class="bg-black min-h-screen flex flex-col">
 
@@ -37,16 +38,30 @@
     </div>
 
     <!-- File List -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
-      <% files.forEach(file => { %>
-        <div class="bg-white dark:bg-gray-700 p-4 rounded-lg shadow hover:shadow-lg transition duration-200 flex justify-between items-center">
-          <span class="truncate text-gray-800 dark:text-white"><%= file.originalname %></span>
-          <a href="/download/<%= file.path %>" target="_blank" class="text-blue-600 dark:text-blue-400 hover:text-blue-800">
-            <i class="ri-download-line text-xl"></i>
-          </a>
-        </div>
-      <% }) %>
-    </div>
+    <% if (files.length === 0) { %>
+      <div class="flex flex-col items-center justify-center h-64 opacity-70">
+        <i class="ri-folder-2-line text-6xl mb-3 text-gray-400"></i>
+        <p class="text-gray-400 text-lg">No files uploaded yet</p>
+      </div>
+    <% } else { %>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4 animate-fadeIn">
+        <% files.forEach(file => { %>
+          <div
+            class="bg-gray-800/60 hover:bg-gray-800 border border-gray-700 rounded-2xl p-4 shadow-md hover:shadow-blue-500/20 transition-all duration-300 group">
+            <div class="flex justify-between items-center mb-2">
+              <i
+                class="ri-file-line text-2xl text-blue-400 group-hover:scale-110 transition-transform duration-300"></i>
+              <a href="/download/<%= file.path %>" target="_blank"
+                class="text-gray-400 hover:text-blue-400 transition duration-200">
+                <i class="ri-download-line text-xl"></i>
+              </a>
+            </div>
+            <p class="truncate text-gray-300 text-sm font-medium"><%= file.originalname %></p>
+            <p class="text-gray-500 text-xs mt-1">Uploaded just now</p>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
 
   </main>
 
