@@ -11,29 +11,39 @@ router.get('/register', (req, res)=>{
     res.render('register', { error: null })
 })
 
-router.post('/register', 
-    body('email').trim().isEmail().isLength({min:10}),
-    body('password').trim().isLength({min:5}),
-    body('username').trim().isLength({min:3}),
-    async (req, res)=>{
-        const errors = validationResult(req);
-        if(!errors.isEmpty()){
-           return res.status(400).json({
-            errors: errors.array(),
-            message: "Invalid data"
-           })
-        }
-        const {email, username, password} = req.body;
+router.post('/register',
+    body('email').trim().isEmail().isLength({ min: 10 }),
+    body('password').trim().isLength({ min: 5 }),
+    body('username').trim().isLength({ min: 3 }),
+    async (req, res) => {
+        try {
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).render('register', {error: 'Invalid input. Please check your data.',});
+            }
+            const { email, username, password } = req.body;
 
-        const hashPassword = await bcrypt.hash(password, 10)
+            const existingUser = await userModel.findOne({$or: [{ username }, { email }]});
+            
+            if (existingUser) {
+                return res.status(400).render('register', {error: 'Username or email already exists'});
+            }
 
-        const newUser = await userModel.create({
-            email,
-            username,
-            password: hashPassword
-        })
-        res.redirect('/user/login');
-})
+            const hashPassword = await bcrypt.hash(password, 10);
+            
+            await userModel.create({
+                email,
+                username,
+                password: hashPassword,
+            });
+
+            res.redirect('/user/login');
+        } catch (err) {
+                console.error('Registration Error:', err);
+                res.status(500).render('register', {error: 'Server error, please try again later'});
+            }
+    }
+);
 
 
 // login section
